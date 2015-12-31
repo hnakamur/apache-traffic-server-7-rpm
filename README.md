@@ -3,6 +3,11 @@ apache-traffic-server-rpm
 
 A Dockerfile to build [Apache Traffic Server](https://trafficserver.apache.org/) rpm for CentOS 6 and 7 using [fedora copr](https://copr.fedoraproject.org/).
 
+* master branch: 6.x LTS release
+    * copr project page: https://copr.fedoraproject.org/coprs/hnakamur/apache-traffic-server-6/
+* 5.x branch: 5.x LTS release
+    * copr project page: https://copr.fedoraproject.org/coprs/hnakamur/apache-traffic-server/
+
 ## Setup
 
 1. Copy `.envrc.example` to `.envrc`.
