@@ -18,12 +18,32 @@ build)
   docker build -t $imagename .
   ;;
 run)
-  # NOTE: We need SYS_ADMIN capability to build rpm with mock
-  docker run --cap-add=SYS_ADMIN -e "COPR_LOGIN=$COPR_LOGIN" -e "COPR_USERNAME=$COPR_USERNAME" -e "COPR_TOKEN=$COPR_TOKEN" -it $imagename
+  # NOTE: The following error occurred when I tried with --cap-add=SYS_ADMIN instead of --privileged=true.
+  # ---------------------------------------------------------------------------------------------------------
+  # Failed:
+  #   filesystem.x86_64 0:3.2-20.el7
+  #   glibc-common.x86_64 0:2.17-106.el7_2.1
+  # 
+  # Complete!
+  # ERROR: Command failed. See logs for output.
+  #    # /usr/bin/yum --installroot /var/lib/mock/epel-7-x86_64/root/ --releasever 7 install @buildsys-build
+  # ---------------------------------------------------------------------------------------------------------
+  # I use --privileged=true for now since I don't know how to figure which capabilities are needed.
+  docker run --privileged=true -e "COPR_LOGIN=$COPR_LOGIN" -e "COPR_USERNAME=$COPR_USERNAME" -e "COPR_TOKEN=$COPR_TOKEN" -it $imagename
   ;;
 bash)
-  # NOTE: We need SYS_ADMIN and SYS_CHROOT capability to build rpm with mock
-  docker run --cap-add=SYS_ADMIN --cap-add=SYS_CHROOT -e "COPR_LOGIN=$COPR_LOGIN" -e "COPR_USERNAME=$COPR_USERNAME" -e "COPR_TOKEN=$COPR_TOKEN" -it $imagename /bin/bash
+  # NOTE: The following error occurred when I tried with --cap-add=SYS_ADMIN instead of --privileged=true.
+  # ---------------------------------------------------------------------------------------------------------
+  # Failed:
+  #   filesystem.x86_64 0:3.2-20.el7
+  #   glibc-common.x86_64 0:2.17-106.el7_2.1
+  # 
+  # Complete!
+  # ERROR: Command failed. See logs for output.
+  #    # /usr/bin/yum --installroot /var/lib/mock/epel-7-x86_64/root/ --releasever 7 install @buildsys-build
+  # ---------------------------------------------------------------------------------------------------------
+  # I use --privileged=true for now since I don't know how to figure which capabilities are needed.
+  docker run --privileged=true -e "COPR_LOGIN=$COPR_LOGIN" -e "COPR_USERNAME=$COPR_USERNAME" -e "COPR_TOKEN=$COPR_TOKEN" -it $imagename /bin/bash
   ;;
 *)
   usage
