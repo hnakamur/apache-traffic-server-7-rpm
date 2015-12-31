@@ -4,19 +4,20 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	5.3.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
 
-Source0:	http://www.apache.org/dist/%{name}/%{name}-%{version}.tar.bz2
-Source1:	http://www.apache.org/dist/%{name}/%{name}-%{version}.tar.bz2.asc
+Source0:	http://archive.apache.org/dist/%{name}/%{name}-%{version}.tar.bz2
+Source1:	http://archive.apache.org/dist/%{name}/%{name}-%{version}.tar.bz2.asc
 Source2:	trafficserver.keyring
 Source3:	trafficserver.sysconf
 Source4:	trafficserver.service
 Source5:	trafficserver.tmpfilesd
 Patch1:		trafficserver-init_scripts.patch
 Patch2:		trafficserver-removeluajit.patch
+Patch101:       cache_inspector_multiline_urls_split.patch
 
 # BuildRoot is only needed for EPEL5:
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -77,6 +78,7 @@ The trafficserver-perl package contains perl bindings.
 %patch1 -p1 -b .init
 # Luajit is just used for an experimental plugin, which we don't build
 %patch2 -p1 -b .luajit
+%patch101 -p0
 rm -rf lib/luajit
 
 %build
@@ -222,6 +224,9 @@ fi
 %{_libdir}/trafficserver/pkgconfig/trafficserver.pc
 
 %changelog
+* Fri Jan  1 2016 Hiroaki Nakamura <hnakamur@gmail.com> 5.3.0-2
+- Add patch to cache_insepector to split multiline URLs correctly
+
 * Sun Jun 21 2015 Peter Robinson <pbrobinson@fedoraproject.org> 5.3.0-1
 - Update to 5.3.0 LTS release
 - Build on aarch64 and power64
