@@ -3,8 +3,8 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	5.3.0
-Release:	2%{?dist}
+Version:	6.0.0
+Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -197,7 +197,7 @@ fi
 %{_bindir}/tspush
 %dir %{_libdir}/trafficserver
 %dir %{_libdir}/trafficserver/plugins
-%{_libdir}/trafficserver/libts*.so.5*
+%{_libdir}/trafficserver/libts*.so.6*
 %{_libdir}/trafficserver/plugins/*.so
 %if %{?fedora}0 > 140 || %{?rhel}0 > 60
 /lib/systemd/system/trafficserver.service
@@ -224,6 +224,9 @@ fi
 %{_libdir}/trafficserver/pkgconfig/trafficserver.pc
 
 %changelog
+* Fri Jan  1 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.0.0-1
+- Update to 6.0.0 LTS release
+
 * Fri Jan  1 2016 Hiroaki Nakamura <hnakamur@gmail.com> 5.3.0-2
 - Add patch to cache_insepector to split multiline URLs correctly
 
