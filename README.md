@@ -63,5 +63,29 @@ instead of running `source .envrc` yourself.
 3. Put the spec file in the `SPECS` directory
 4. Put the source files in the `SOURCES` directory
 
+## Usage: How to build rpms on vagrant
+
+Copy .envrc.example to .envrc and modify it.
+
+Run the following command to boot the virtual machine.
+
+```
+vagrant up
+```
+
+Run the following command to connect to the virtual machine with ssh.
+
+
+```
+vagrant ssh
+```
+
+In the virtual machine, run the following command to build RPMs.
+
+```
+cd rpmbuild
+./build.sh mock
+```
+
 ## License
 MIT

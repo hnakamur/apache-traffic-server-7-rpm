@@ -1,6 +1,10 @@
 #!/bin/bash -x
 set -eu
 
+if [ -f .envrc ]; then
+  . .envrc
+fi
+
 # NOTE: Edit project_name and rpm_name.
 copr_project_name=apache-traffic-server
 rpm_name=trafficserver
