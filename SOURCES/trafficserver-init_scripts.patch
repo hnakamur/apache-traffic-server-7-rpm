@@ -1,0 +1,12 @@
+--- trafficserver-4.0.1/rc/trafficserver.in.orginal	2012-06-23 15:02:25.768405925 +0200
++++ trafficserver-4.0.1/rc/trafficserver.in	2012-06-23 15:07:16.507193268 +0200
+@@ -29,7 +29,7 @@
+ # Provides:          Traffic Server
+ # Required-Start:    $local_fs $remote_fs
+ # Required-Stop:     $local_fs $remote_fs
+-# Default-Start:     2 3 4 5
++# Default-Start:     -
+ # Default-Stop:      S 0 1 6
+ # Short-Description: Startup/shutdown script for the Apache Traffic Server
+ # Description:       Apache Traffic Server is fast, scalable and extensible
+
