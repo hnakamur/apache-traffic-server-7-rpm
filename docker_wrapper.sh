@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-imagename=varnishheadrpm
+imagename=apachetrafficserverrpm
 
 usage() {
   cat <<'EOF' 1>&2
@@ -22,8 +22,8 @@ run)
   docker run --cap-add=SYS_ADMIN -e "COPR_LOGIN=$COPR_LOGIN" -e "COPR_USERNAME=$COPR_USERNAME" -e "COPR_TOKEN=$COPR_TOKEN" -it $imagename
   ;;
 bash)
-  # NOTE: We need SYS_ADMIN capability to build rpm with mock
-  docker run --cap-add=SYS_ADMIN -e "COPR_LOGIN=$COPR_LOGIN" -e "COPR_USERNAME=$COPR_USERNAME" -e "COPR_TOKEN=$COPR_TOKEN" -it $imagename /bin/bash
+  # NOTE: We need SYS_ADMIN and SYS_CHROOT capability to build rpm with mock
+  docker run --cap-add=SYS_ADMIN --cap-add=SYS_CHROOT -e "COPR_LOGIN=$COPR_LOGIN" -e "COPR_USERNAME=$COPR_USERNAME" -e "COPR_TOKEN=$COPR_TOKEN" -it $imagename /bin/bash
   ;;
 *)
   usage
