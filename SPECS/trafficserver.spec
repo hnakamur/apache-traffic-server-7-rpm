@@ -3,8 +3,8 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	5.3.0
-Release:	2%{?dist}
+Version:	5.3.2
+Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -224,6 +224,9 @@ fi
 %{_libdir}/trafficserver/pkgconfig/trafficserver.pc
 
 %changelog
+* Fri Jan  1 2016 Hiroaki Nakamura <hnakamur@gmail.com> 5.3.2-1
+- Update to 5.3.2 LTS release
+
 * Fri Jan  1 2016 Hiroaki Nakamura <hnakamur@gmail.com> 5.3.0-2
 - Add patch to cache_insepector to split multiline URLs correctly
 
