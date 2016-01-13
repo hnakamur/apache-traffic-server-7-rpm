@@ -4,7 +4,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.0.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -87,7 +87,8 @@ NOCONFIGURE=1 autoreconf -vif
   --with-tcl=%{_libdir} \
   --disable-luajit \
   --with-user=ats --with-group=ats \
-  --disable-silent-rules
+  --disable-silent-rules \
+  --enable-experimental-plugins
 
 make %{?_smp_mflags} V=1
 
@@ -220,6 +221,9 @@ fi
 %{_libdir}/trafficserver/pkgconfig/trafficserver.pc
 
 %changelog
+* Wed Jan 13 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.0.0-3
+- Build experimental plugins
+
 * Fri Jan  1 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.0.0-2
 - Just use configure --disable-luajit without a patch or deleting files
 
