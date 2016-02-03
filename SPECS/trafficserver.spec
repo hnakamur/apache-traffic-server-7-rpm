@@ -3,8 +3,8 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	6.0.0
-Release:	3%{?dist}
+Version:	6.1.0
+Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -16,7 +16,6 @@ Source3:	trafficserver.sysconf
 Source4:	trafficserver.service
 Source5:	trafficserver.tmpfilesd
 Patch1:		trafficserver-init_scripts.patch
-Patch101:       cache_inspector_multiline_urls_split.patch
 
 # BuildRoot is only needed for EPEL5:
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -75,7 +74,6 @@ The trafficserver-perl package contains perl bindings.
 %setup -q
 
 %patch1 -p1 -b .init
-%patch101 -p0
 
 %build
 NOCONFIGURE=1 autoreconf -vif
@@ -216,11 +214,15 @@ fi
 %files devel
 %defattr(-,root,root,-)
 %{_bindir}/tsxs
+%{_bindir}/header_rewrite_test
 %{_includedir}/ts
 %{_libdir}/trafficserver/*.so
 %{_libdir}/trafficserver/pkgconfig/trafficserver.pc
 
 %changelog
+* Wed Feb  3 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.0-1
+- Update to 6.1.0 LTS release
+
 * Wed Jan 13 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.0.0-3
 - Build experimental plugins
 

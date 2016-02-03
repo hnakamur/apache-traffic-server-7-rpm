@@ -39,7 +39,6 @@ EOF
 }
 
 topdir=`rpm --eval '%{_topdir}'`
-topdir_in_chroot=/builddir/build
 
 download_source_files() {
   source_urls=`rpmspec -P ${topdir}/SPECS/${spec_file} | awk '/^Source[0-9]*:\s*http/ {print $2}'`
