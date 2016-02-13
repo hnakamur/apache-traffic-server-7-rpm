@@ -1,10 +1,12 @@
+%define _prefix /opt/trafficserver
+
 # https://fedoraproject.org/wiki/Packaging:Guidelines#PIE
 %define _hardened_build 1
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.1.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -78,11 +80,11 @@ The trafficserver-perl package contains perl bindings.
 %build
 NOCONFIGURE=1 autoreconf -vif
 %configure \
-  --enable-layout=Gentoo \
-  --libdir=%{_libdir}/trafficserver \
-  --libexecdir=%{_libdir}/trafficserver/plugins \
-  --sysconfdir=%{_sysconfdir}/trafficserver \
-  --with-tcl=%{_libdir} \
+  --enable-layout=opt \
+  --sysconfdir=%{_prefix}%{_sysconfdir} \
+  --localstatedir=%{_prefix}%{_localstatedir} \
+  --libexecdir=%{_prefix}/%{_lib}/plugins \
+  --with-tcl=/usr/%{_lib} \
   --disable-luajit \
   --with-user=ats --with-group=ats \
   --disable-silent-rules \
@@ -126,7 +128,20 @@ perl -pi -e 's/^CONFIG.*proxy.config.ssl.server.cert.path.*$/CONFIG proxy.config
 perl -pi -e 's/^CONFIG.*proxy.config.ssl.server.private_key.path.*$/CONFIG proxy.config.ssl.server.private_key.path STRING \/etc\/pki\/tls\/private\//' \
 	%{buildroot}/etc/trafficserver/records.config
 
-mkdir -p %{buildroot}/var/run/trafficserver
+mkdir -p %{buildroot}%{_sysconfdir}
+mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}%{_sysconfdir}/trafficserver
+ln -s ../..%{_sysconfdir}/trafficserver %{buildroot}%{_prefix}%{_sysconfdir}
+
+rm -rf %{buildroot}%{_prefix}%{_localstatedir}/*
+
+mkdir -p %{buildroot}%{_localstatedir}/run/trafficserver
+ln -s ../../..%{_localstatedir}/run/trafficserver %{buildroot}%{_prefix}%{_localstatedir}/run
+
+mkdir -p %{buildroot}%{_localstatedir}/log/trafficserver
+ln -s ../../..%{_localstatedir}/log/trafficserver %{buildroot}%{_prefix}%{_localstatedir}/logs
+
+mkdir -p %{buildroot}%{_localstatedir}/cache/trafficserver
+ln -s ../../..%{_localstatedir}/cache/trafficserver %{buildroot}%{_prefix}%{_localstatedir}/cache
 
 %check
 %ifnarch ppc64
@@ -190,10 +205,10 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/trafficserver
 %{_bindir}/traffic*
 %{_bindir}/tspush
-%dir %{_libdir}/trafficserver
-%dir %{_libdir}/trafficserver/plugins
-%{_libdir}/trafficserver/libts*.so.6*
-%{_libdir}/trafficserver/plugins/*.so
+%dir %{_libdir}
+%dir %{_libdir}/plugins
+%{_libdir}/libts*.so.6*
+%{_libdir}/plugins/*.so
 %if %{?fedora}0 > 140 || %{?rhel}0 > 60
 /lib/systemd/system/trafficserver.service
 %config(noreplace) %{_sysconfdir}/tmpfiles.d/trafficserver.conf
@@ -203,6 +218,10 @@ fi
 %dir /var/log/trafficserver
 %dir /var/run/trafficserver
 %dir /var/cache/trafficserver
+%{_prefix}%{_sysconfdir}
+%{_prefix}%{_localstatedir}/run
+%{_prefix}%{_localstatedir}/logs
+%{_prefix}%{_localstatedir}/cache
 
 %files perl
 %defattr(-,root,root,-)
@@ -216,10 +235,13 @@ fi
 %{_bindir}/tsxs
 %{_bindir}/header_rewrite_test
 %{_includedir}/ts
-%{_libdir}/trafficserver/*.so
-%{_libdir}/trafficserver/pkgconfig/trafficserver.pc
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Sun Feb 14 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-2
+- Set prefix to /opt/trafficserver and use relative directories
+
 * Tue Feb  9 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-1
 - Update to 6.1.1 LTS release
 
