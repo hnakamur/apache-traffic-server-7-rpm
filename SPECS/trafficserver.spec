@@ -110,7 +110,7 @@ install -D -m 0644 -p %{SOURCE5} \
    %{buildroot}%{_sysconfdir}/tmpfiles.d/trafficserver.conf
 %else
 mkdir -p %{buildroot}/etc/init.d/
-mv %{buildroot}/usr/bin/trafficserver %{buildroot}/etc/init.d
+mv %{buildroot}%{_prefix}/bin/trafficserver %{buildroot}/etc/init.d
 %endif
 
 # Remove libtool archives and static libs
@@ -225,7 +225,7 @@ fi
 
 %files perl
 %defattr(-,root,root,-)
-%{_mandir}/man3/*
+%{_prefix}/share/man/man3/*
 %{_datadir}/perl5/Apache/TS.pm.in
 %{_datadir}/perl5/Apache/TS.pm
 %{_datadir}/perl5/Apache/TS/*
