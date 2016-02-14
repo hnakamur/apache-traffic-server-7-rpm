@@ -5,8 +5,8 @@ After=syslog.target network.target
 [Service]
 Type=simple
 EnvironmentFile=-/etc/sysconfig/trafficserver
-ExecStart=/usr/bin/traffic_cop $TC_DAEMON_ARGS
-ExecReload=/usr/bin/traffic_line -x
+ExecStart=/opt/trafficserver/bin/traffic_cop $TC_DAEMON_ARGS
+ExecReload=/opt/trafficserver/bin/traffic_line -x
 
 [Install]
 WantedBy=multi-user.target
