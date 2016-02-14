@@ -1,12 +1,7 @@
 apache-traffic-server-rpm
 =========================
 
-A Dockerfile to build [Apache Traffic Server](https://trafficserver.apache.org/) 5.x or 6.x RPMs for CentOS 6 and 7 using [Mock](https://fedoraproject.org/wiki/Mock) or [fedora copr](https://copr.fedoraproject.org/).
-
-* master branch: 6.x LTS release
-    * copr project page: https://copr.fedoraproject.org/coprs/hnakamur/apache-traffic-server-6/
-* 5.x branch: 5.x LTS release
-    * copr project page: https://copr.fedoraproject.org/coprs/hnakamur/apache-traffic-server/
+A Dockerfile to build [Apache Traffic Server](https://trafficserver.apache.org/) 6.x RPM with prefix /opt/trafficserver for CentOS 6 and 7 using [Mock](https://fedoraproject.org/wiki/Mock) or [fedora copr](https://copr.fedoraproject.org/).
 
 ## Setup
 
