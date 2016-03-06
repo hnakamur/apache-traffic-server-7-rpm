@@ -6,7 +6,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.1.1
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -18,6 +18,14 @@ Source3:	trafficserver.sysconf
 Source4:	trafficserver.service
 Source5:	trafficserver.tmpfilesd
 Patch1:		trafficserver-init_scripts.patch
+
+# This patch enables unix domain socket.
+# The original version of this patch is at
+# https://github.com/pixiv/trafficserver/tree/patch/ts-2907
+# The modified version for trafficserver 6.1.1 is at
+# https://github.com/hnakamur/trafficserver/tree/patch/ts-2907-6.1.1
+# ts-2907-unix-domain-socket.patch is the same as latter.
+Patch101:	ts-2907-unix-domain-socket.patch
 
 # BuildRoot is only needed for EPEL5:
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -76,6 +84,7 @@ The trafficserver-perl package contains perl bindings.
 %setup -q
 
 %patch1 -p1 -b .init
+%patch101 -p1
 
 %build
 NOCONFIGURE=1 autoreconf -vif
@@ -239,6 +248,9 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Mon Mar  7 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-4
+- Apply patch to enable unix domain socket.
+
 * Sun Feb 14 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-3
 - Enable luajit
 
