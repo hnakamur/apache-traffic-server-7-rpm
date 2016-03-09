@@ -6,7 +6,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.1.1
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -84,7 +84,7 @@ The trafficserver-perl package contains perl bindings.
 %setup -q
 
 %patch1 -p1 -b .init
-%patch101 -p1
+# %patch101 -p1
 
 %build
 NOCONFIGURE=1 autoreconf -vif
@@ -248,6 +248,9 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Wed Mar  9 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-5
+- Disable patch to enable unix domain socket.
+
 * Mon Mar  7 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-4
 - Apply patch to enable unix domain socket.
 
