@@ -6,7 +6,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.1.1
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -19,13 +19,7 @@ Source4:	trafficserver.service
 Source5:	trafficserver.tmpfilesd
 Patch1:		trafficserver-init_scripts.patch
 
-# This patch enables unix domain socket.
-# The original version of this patch is at
-# https://github.com/pixiv/trafficserver/tree/patch/ts-2907
-# The modified version for trafficserver 6.1.1 is at
-# https://github.com/hnakamur/trafficserver/tree/patch/ts-2907-6.1.1
-# ts-2907-unix-domain-socket.patch is the same as latter.
-Patch101:	ts-2907-unix-domain-socket.patch
+Patch101:       trafficserver-6.1.1.add_ignores_server_cc_max_age_and_expires.patch
 
 # BuildRoot is only needed for EPEL5:
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -84,7 +78,7 @@ The trafficserver-perl package contains perl bindings.
 %setup -q
 
 %patch1 -p1 -b .init
-# %patch101 -p1
+%patch101 -p1
 
 %build
 NOCONFIGURE=1 autoreconf -vif
@@ -248,6 +242,10 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Tue Apr 26 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-6
+- Apply patch to add proxy.config.http.cache.ignore_expires and
+  proxy.config.http.cache.ignore_server_cc_max_age.
+
 * Wed Mar  9 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-5
 - Disable patch to enable unix domain socket.
 
