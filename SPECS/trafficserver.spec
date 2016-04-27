@@ -6,7 +6,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.1.1
-Release:	6%{?dist}
+Release:	7%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -18,8 +18,6 @@ Source3:	trafficserver.sysconf
 Source4:	trafficserver.service
 Source5:	trafficserver.tmpfilesd
 Patch1:		trafficserver-init_scripts.patch
-
-Patch101:       trafficserver-6.1.1.add_ignores_server_cc_max_age_and_expires.patch
 
 # BuildRoot is only needed for EPEL5:
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -78,7 +76,6 @@ The trafficserver-perl package contains perl bindings.
 %setup -q
 
 %patch1 -p1 -b .init
-%patch101 -p1
 
 %build
 NOCONFIGURE=1 autoreconf -vif
@@ -242,6 +239,10 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Wed Apr 27 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-7
+- Remove patch to add proxy.config.http.cache.ignore_expires and
+  proxy.config.http.cache.ignore_server_cc_max_age.
+
 * Tue Apr 26 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-6
 - Apply patch to add proxy.config.http.cache.ignore_expires and
   proxy.config.http.cache.ignore_server_cc_max_age.
