@@ -1,6 +1,6 @@
 diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_cached_response.c trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_cached_response.c
 --- trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_cached_response.c	2016-02-03 11:35:34.000000000 +0900
-+++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_cached_response.c	2016-05-10 23:19:03.941257946 +0900
++++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_cached_response.c	2016-05-11 12:03:28.544657284 +0900
 @@ -185,9 +185,12 @@
  ts_lua_cached_response_get_headers(lua_State *L)
  {
@@ -14,7 +14,7 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_cached_res
    TSMLoc field_loc;
    TSMLoc next_field_loc;
  
-@@ -204,11 +207,28 @@
+@@ -204,11 +207,29 @@
    while (field_loc) {
      name = TSMimeHdrFieldNameGet(http_ctx->cached_response_bufp, http_ctx->cached_response_hdrp, field_loc, &name_len);
      if (name && name_len) {
@@ -24,24 +24,25 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_cached_res
 -      lua_pushlstring(L, value, value_len);
 -      lua_rawset(L, -3);
 +      lua_rawget(L, -2);
-+      old_value = lua_tolstring(L, -1, &old_value_len);
-+      if (old_value != NULL) {
++      if (lua_isnil(L, -1)) {
++        lua_pop(L, 1);
++        value =
++          TSMimeHdrFieldValueStringGet(http_ctx->cached_response_bufp, http_ctx->cached_response_hdrp, field_loc, -1, &value_len);
 +        lua_pushlstring(L, name, name_len);
-+
++        lua_pushlstring(L, value, value_len);
++        lua_rawset(L, -3);
++      } else {
++        old_value = lua_tolstring(L, -1, &old_value_len);
 +        luaL_buffinit(L, &buf);
 +        luaL_addlstring(&buf, old_value, old_value_len);
 +        luaL_addlstring(&buf, ", ", 2);
 +        value =
 +          TSMimeHdrFieldValueStringGet(http_ctx->cached_response_bufp, http_ctx->cached_response_hdrp, field_loc, -1, &value_len);
 +        luaL_addlstring(&buf, value, value_len);
-+        luaL_pushresult(&buf);
 +
-+        lua_rawset(L, -3);
-+      } else {
-+      value =
-+          TSMimeHdrFieldValueStringGet(http_ctx->cached_response_bufp, http_ctx->cached_response_hdrp, field_loc, -1, &value_len);
++        lua_pop(L, 1);
 +        lua_pushlstring(L, name, name_len);
-+        lua_pushlstring(L, value, value_len);
++        luaL_pushresult(&buf);
 +        lua_rawset(L, -3);
 +      }
      }
@@ -49,7 +50,7 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_cached_res
      next_field_loc = TSMimeHdrFieldNext(http_ctx->cached_response_bufp, http_ctx->cached_response_hdrp, field_loc);
 diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_request.c trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_client_request.c
 --- trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_request.c	2016-02-03 11:35:34.000000000 +0900
-+++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_client_request.c	2016-05-10 23:21:05.693252259 +0900
++++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_client_request.c	2016-05-11 12:03:37.077657773 +0900
 @@ -231,9 +231,12 @@
  ts_lua_client_request_get_headers(lua_State *L)
  {
@@ -63,7 +64,7 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_req
    TSMLoc field_loc;
    TSMLoc next_field_loc;
  
-@@ -248,10 +251,26 @@
+@@ -248,10 +251,27 @@
    while (field_loc) {
      name = TSMimeHdrFieldNameGet(http_ctx->client_request_bufp, http_ctx->client_request_hdrp, field_loc, &name_len);
      if (name && name_len) {
@@ -72,30 +73,31 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_req
 -      lua_pushlstring(L, value, value_len);
 -      lua_rawset(L, -3);
 +      lua_rawget(L, -2);
-+      old_value = lua_tolstring(L, -1, &old_value_len);
-+      if (old_value != NULL) {
++      if (lua_isnil(L, -1)) {
++        lua_pop(L, 1);
++        value = TSMimeHdrFieldValueStringGet(http_ctx->client_request_bufp, http_ctx->client_request_hdrp, field_loc, -1, &value_len);
 +        lua_pushlstring(L, name, name_len);
-+
++        lua_pushlstring(L, value, value_len);
++        lua_rawset(L, -3);
++      } else {
++        old_value = lua_tolstring(L, -1, &old_value_len);
 +        luaL_buffinit(L, &buf);
 +        luaL_addlstring(&buf, old_value, old_value_len);
 +        luaL_addlstring(&buf, ", ", 2);
 +        value = TSMimeHdrFieldValueStringGet(http_ctx->client_request_bufp, http_ctx->client_request_hdrp, field_loc, -1, &value_len);
 +        luaL_addlstring(&buf, value, value_len);
-+        luaL_pushresult(&buf);
 +
++        lua_pop(L, 1);
++        lua_pushlstring(L, name, name_len);
++        luaL_pushresult(&buf);
 +        lua_rawset(L, -3);
-+      } else {
-+				value = TSMimeHdrFieldValueStringGet(http_ctx->client_request_bufp, http_ctx->client_request_hdrp, field_loc, -1, &value_len);
-+				lua_pushlstring(L, name, name_len);
-+				lua_pushlstring(L, value, value_len);
-+				lua_rawset(L, -3);
-+			}
++      }
      }
  
      next_field_loc = TSMimeHdrFieldNext(http_ctx->client_request_bufp, http_ctx->client_request_hdrp, field_loc);
 diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_response.c trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_client_response.c
 --- trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_response.c	2016-02-03 11:35:34.000000000 +0900
-+++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_client_response.c	2016-05-10 23:21:43.155250510 +0900
++++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_client_response.c	2016-05-11 12:03:43.782658155 +0900
 @@ -188,9 +188,12 @@
  ts_lua_client_response_get_headers(lua_State *L)
  {
@@ -109,7 +111,7 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_res
    TSMLoc field_loc;
    TSMLoc next_field_loc;
  
-@@ -207,11 +210,28 @@
+@@ -207,11 +210,29 @@
    while (field_loc) {
      name = TSMimeHdrFieldNameGet(http_ctx->client_response_bufp, http_ctx->client_response_hdrp, field_loc, &name_len);
      if (name && name_len) {
@@ -119,32 +121,33 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_client_res
 -      lua_pushlstring(L, value, value_len);
 -      lua_rawset(L, -3);
 +      lua_rawget(L, -2);
-+      old_value = lua_tolstring(L, -1, &old_value_len);
-+      if (old_value != NULL) {
++      if (lua_isnil(L, -1)) {
++        lua_pop(L, 1);
++        value =
++          TSMimeHdrFieldValueStringGet(http_ctx->client_response_bufp, http_ctx->client_response_hdrp, field_loc, -1, &value_len);
 +        lua_pushlstring(L, name, name_len);
-+
++        lua_pushlstring(L, value, value_len);
++        lua_rawset(L, -3);
++      } else {
++        old_value = lua_tolstring(L, -1, &old_value_len);
 +        luaL_buffinit(L, &buf);
 +        luaL_addlstring(&buf, old_value, old_value_len);
 +        luaL_addlstring(&buf, ", ", 2);
 +        value =
 +          TSMimeHdrFieldValueStringGet(http_ctx->client_response_bufp, http_ctx->client_response_hdrp, field_loc, -1, &value_len);
 +        luaL_addlstring(&buf, value, value_len);
-+        luaL_pushresult(&buf);
 +
++        lua_pop(L, 1);
++        lua_pushlstring(L, name, name_len);
++        luaL_pushresult(&buf);
 +        lua_rawset(L, -3);
-+      } else {
-+				value =
-+					TSMimeHdrFieldValueStringGet(http_ctx->client_response_bufp, http_ctx->client_response_hdrp, field_loc, -1, &value_len);
-+				lua_pushlstring(L, name, name_len);
-+				lua_pushlstring(L, value, value_len);
-+				lua_rawset(L, -3);
-+			}
++      }
      }
  
      next_field_loc = TSMimeHdrFieldNext(http_ctx->client_response_bufp, http_ctx->client_response_hdrp, field_loc);
 diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_request.c trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_server_request.c
 --- trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_request.c	2016-02-03 11:35:34.000000000 +0900
-+++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_server_request.c	2016-05-10 23:22:16.288248962 +0900
++++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_server_request.c	2016-05-11 12:03:20.338656816 +0900
 @@ -236,9 +236,12 @@
  ts_lua_server_request_get_headers(lua_State *L)
  {
@@ -158,7 +161,7 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_req
    TSMLoc field_loc;
    TSMLoc next_field_loc;
  
-@@ -255,10 +258,26 @@
+@@ -255,10 +258,27 @@
    while (field_loc) {
      name = TSMimeHdrFieldNameGet(http_ctx->server_request_bufp, http_ctx->server_request_hdrp, field_loc, &name_len);
      if (name && name_len) {
@@ -167,30 +170,31 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_req
 -      lua_pushlstring(L, value, value_len);
 -      lua_rawset(L, -3);
 +      lua_rawget(L, -2);
-+      old_value = lua_tolstring(L, -1, &old_value_len);
-+      if (old_value != NULL) {
++      if (lua_isnil(L, -1)) {
++        lua_pop(L, 1);
++        value = TSMimeHdrFieldValueStringGet(http_ctx->server_request_bufp, http_ctx->server_request_hdrp, field_loc, -1, &value_len);
 +        lua_pushlstring(L, name, name_len);
-+
++        lua_pushlstring(L, value, value_len);
++        lua_rawset(L, -3);
++      } else {
++        old_value = lua_tolstring(L, -1, &old_value_len);
 +        luaL_buffinit(L, &buf);
 +        luaL_addlstring(&buf, old_value, old_value_len);
 +        luaL_addlstring(&buf, ", ", 2);
 +        value = TSMimeHdrFieldValueStringGet(http_ctx->server_request_bufp, http_ctx->server_request_hdrp, field_loc, -1, &value_len);
 +        luaL_addlstring(&buf, value, value_len);
-+        luaL_pushresult(&buf);
 +
++        lua_pop(L, 1);
++        lua_pushlstring(L, name, name_len);
++        luaL_pushresult(&buf);
 +        lua_rawset(L, -3);
-+      } else {
-+				value = TSMimeHdrFieldValueStringGet(http_ctx->server_request_bufp, http_ctx->server_request_hdrp, field_loc, -1, &value_len);
-+				lua_pushlstring(L, name, name_len);
-+				lua_pushlstring(L, value, value_len);
-+				lua_rawset(L, -3);
-+			}
++      }
      }
  
      next_field_loc = TSMimeHdrFieldNext(http_ctx->server_request_bufp, http_ctx->server_request_hdrp, field_loc);
 diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_response.c trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_server_response.c
 --- trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_response.c	2016-02-03 11:35:34.000000000 +0900
-+++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_server_response.c	2016-05-10 23:22:50.046247385 +0900
++++ trafficserver-6.1.1/plugins/experimental/ts_lua/ts_lua_server_response.c	2016-05-11 12:03:08.502656139 +0900
 @@ -87,9 +87,12 @@
  ts_lua_server_response_get_headers(lua_State *L)
  {
@@ -204,7 +208,7 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_res
    TSMLoc field_loc;
    TSMLoc next_field_loc;
  
-@@ -106,11 +109,28 @@
+@@ -106,11 +109,29 @@
    while (field_loc) {
      name = TSMimeHdrFieldNameGet(http_ctx->server_response_bufp, http_ctx->server_response_hdrp, field_loc, &name_len);
      if (name && name_len) {
@@ -214,26 +218,27 @@ diff -ruN trafficserver-6.1.1.orig/plugins/experimental/ts_lua/ts_lua_server_res
 -      lua_pushlstring(L, value, value_len);
 -      lua_rawset(L, -3);
 +      lua_rawget(L, -2);
-+      old_value = lua_tolstring(L, -1, &old_value_len);
-+      if (old_value != NULL) {
++      if (lua_isnil(L, -1)) {
++        lua_pop(L, 1);
++        value =
++          TSMimeHdrFieldValueStringGet(http_ctx->server_response_bufp, http_ctx->server_response_hdrp, field_loc, -1, &value_len);
 +        lua_pushlstring(L, name, name_len);
-+
++        lua_pushlstring(L, value, value_len);
++        lua_rawset(L, -3);
++      } else {
++        old_value = lua_tolstring(L, -1, &old_value_len);
 +        luaL_buffinit(L, &buf);
 +        luaL_addlstring(&buf, old_value, old_value_len);
 +        luaL_addlstring(&buf, ", ", 2);
 +        value =
 +          TSMimeHdrFieldValueStringGet(http_ctx->server_response_bufp, http_ctx->server_response_hdrp, field_loc, -1, &value_len);
 +        luaL_addlstring(&buf, value, value_len);
-+        luaL_pushresult(&buf);
 +
++        lua_pop(L, 1);
++        lua_pushlstring(L, name, name_len);
++        luaL_pushresult(&buf);
 +        lua_rawset(L, -3);
-+      } else {
-+				value =
-+					TSMimeHdrFieldValueStringGet(http_ctx->server_response_bufp, http_ctx->server_response_hdrp, field_loc, -1, &value_len);
-+				lua_pushlstring(L, name, name_len);
-+				lua_pushlstring(L, value, value_len);
-+				lua_rawset(L, -3);
-+			}
++      }
      }
  
      next_field_loc = TSMimeHdrFieldNext(http_ctx->server_response_bufp, http_ctx->server_response_hdrp, field_loc);

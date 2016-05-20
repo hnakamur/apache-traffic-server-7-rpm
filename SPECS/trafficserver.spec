@@ -6,7 +6,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.1.1
-Release:	8%{?dist}
+Release:	9%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -242,6 +242,10 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Wed May 11 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-9
+- Fix bug in patch to concatenate multiple header values of
+  the same name in TSLua.
+
 * Tue May 10 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-8
 - Concatenate multiple header values of the same name in TSLua.
 
