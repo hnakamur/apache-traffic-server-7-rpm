@@ -6,7 +6,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	6.1.1
-Release:	9%{?dist}
+Release:	10%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -19,7 +19,7 @@ Source4:	trafficserver.service
 Source5:	trafficserver.tmpfilesd
 Patch1:		trafficserver-init_scripts.patch
 
-Patch101:	trafficserver-6.1.1.ts_lua.concat_same_headers.patch
+Patch101:	trafficserver-6.1.1-require-s-maxage.patch
 
 # BuildRoot is only needed for EPEL5:
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -242,6 +242,12 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Fri May 20 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-10
+- Add patch to add new value to proxy.config.http.cache.required_headers
+  to require s-maxage for contents to be cached.
+- Remove patch to concatenate multiple header values of
+  the same name in TSLua.
+
 * Wed May 11 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.1.1-9
 - Fix bug in patch to concatenate multiple header values of
   the same name in TSLua.
