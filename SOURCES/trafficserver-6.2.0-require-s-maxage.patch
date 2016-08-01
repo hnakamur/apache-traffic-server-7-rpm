@@ -1,0 +1,31 @@
+--- trafficserver-6.2.0.orig/proxy/http/HttpConfig.h	2016-07-11 23:03:32.000000000 +0000
++++ trafficserver-6.2.0/proxy/http/HttpConfig.h	2016-07-27 14:51:27.086384823 +0000
+@@ -695,7 +695,10 @@
+   enum {
+     CACHE_REQUIRED_HEADERS_NONE                   = 0,
+     CACHE_REQUIRED_HEADERS_AT_LEAST_LAST_MODIFIED = 1,
+-    CACHE_REQUIRED_HEADERS_CACHE_CONTROL          = 2
++    CACHE_REQUIRED_HEADERS_CACHE_CONTROL          = 2,
++    // NOTE: This is a value added by my private patch, so choose a value which is unlikely
++    // to added in the traffciserver upstream.
++    CACHE_REQUIRED_HEADERS_CACHE_CONTROL_S_MAXAGE = 99
+   };
+ 
+   enum {
+--- trafficserver-6.2.0.orig/proxy/http/HttpTransact.cc	2016-07-11 23:03:32.000000000 +0000
++++ trafficserver-6.2.0/proxy/http/HttpTransact.cc	2016-07-27 14:44:48.142540313 +0000
+@@ -6245,6 +6245,14 @@
+         }
+         break;
+ 
++      case HttpConfigParams::CACHE_REQUIRED_HEADERS_CACHE_CONTROL_S_MAXAGE:
++        if (!(response->get_cooked_cc_mask() & MIME_COOKED_MASK_CC_S_MAXAGE)) {
++          DebugTxn("http_trans", "[is_response_cacheable] "
++                                 "s-maxage is required");
++          return false;
++        }
++        break;
++
+       default:
+         break;
+       }
