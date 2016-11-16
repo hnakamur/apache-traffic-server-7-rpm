@@ -18,5 +18,5 @@ RUN source_urls=`rpmspec -P ./SPECS/trafficserver.spec | awk '/^Source[0-9]*:\s*
 RUN yum install -y epel-release \
  && yum-builddep -y ./SPECS/trafficserver.spec
 
-RUN rpmbuild -bb ./SPECS/trafficserver.spec
-RUN yum install -y ./RPMS/x86_64/*.rpm
+RUN QA_RPATHS=$[ 0x0002 ] rpmbuild -bb ./SPECS/trafficserver.spec
+#RUN yum install -y ./RPMS/x86_64/*.rpm
