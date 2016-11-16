@@ -94,6 +94,7 @@ build_rpm_on_copr() {
       $chroot_opts \
       --data-urlencode "description=${copr_project_description}" \
       --data-urlencode "instructions=${copr_project_instructions}" \
+      --data-urlencode "build_enable_net=y" \
       https://copr.fedoraproject.org/api/coprs/${COPR_USERNAME}/new/
   fi
   # Add a new build on copr with uploading a srpm file.
