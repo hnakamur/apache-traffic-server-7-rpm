@@ -234,7 +234,6 @@ fi
 %{_prefix}/lib/perl5/Apache/TS.pm.in
 %{_prefix}/lib/perl5/Apache/TS.pm
 %{_prefix}/lib/perl5/Apache/TS/*
-%{_prefix}/lib/perl5/Apache/TS/Config/*
 
 %files devel
 %defattr(-,root,root,-)
