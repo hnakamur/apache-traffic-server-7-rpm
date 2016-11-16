@@ -230,7 +230,7 @@ fi
 
 %files perl
 %defattr(-,root,root,-)
-%{_prefix}/man/man3/*
+%{_prefix}/share/man/man3/*
 %{_prefix}/lib/perl5/Apache/TS.pm.in
 %{_prefix}/lib/perl5/Apache/TS.pm
 %{_prefix}/lib/perl5/Apache/TS/*
