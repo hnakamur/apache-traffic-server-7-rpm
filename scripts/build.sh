@@ -2,11 +2,11 @@
 set -eu
 
 # NOTE: Edit project_name and rpm_name.
-copr_project_name=apache-traffic-server-6
+copr_project_name=apache-traffic-server-7
 rpm_name=trafficserver
 arch=x86_64
 
-copr_project_description="Apache Traffic Server 6.x"
+copr_project_description="Apache Traffic Server 7.x"
 
 copr_project_instructions="\`\`\`
 version=\$(rpm -q --qf "%{VERSION}" \$(rpm -q --whatprovides redhat-release))
