@@ -6,7 +6,7 @@
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
 Version:	7.0.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -28,7 +28,6 @@ BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 ExcludeArch:	%{arm} s390 s390x
 
 BuildRequires:	boost-devel
-BuildRequires:	expat-devel
 BuildRequires:	gcc-c++
 BuildRequires:	gnupg
 BuildRequires:	hwloc-devel
@@ -244,6 +243,9 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Wed Nov 16 2016 Hiroaki Nakamura <hnakamur@gmail.com> 7.0.0-2
+- Remove expat-devel from build dependencies
+
 * Wed Nov 16 2016 Hiroaki Nakamura <hnakamur@gmail.com> 7.0.0-1
 - Update to 7.0.0 LTS release
 
