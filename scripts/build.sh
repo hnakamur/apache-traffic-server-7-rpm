@@ -2,11 +2,11 @@
 set -eu
 
 # NOTE: Edit project_name and rpm_name.
-copr_project_name=apache-traffic-server-6
+copr_project_name=apache-traffic-server-7
 rpm_name=trafficserver
 arch=x86_64
 
-copr_project_description="Apache Traffic Server 6.x"
+copr_project_description="Apache Traffic Server 7.x"
 
 copr_project_instructions="\`\`\`
 version=\$(rpm -q --qf "%{VERSION}" \$(rpm -q --whatprovides redhat-release))
@@ -25,7 +25,7 @@ sudo yum -y install ${rpm_name}
 \`\`\`"
 
 spec_file=${rpm_name}.spec
-mock_chroots="epel-6-${arch} epel-7-${arch}"
+mock_chroots="epel-7-${arch}"
 
 usage() {
   cat <<'EOF' 1>&2
@@ -94,6 +94,7 @@ build_rpm_on_copr() {
       $chroot_opts \
       --data-urlencode "description=${copr_project_description}" \
       --data-urlencode "instructions=${copr_project_instructions}" \
+      --data-urlencode "build_enable_net=y" \
       https://copr.fedoraproject.org/api/coprs/${COPR_USERNAME}/new/
   fi
   # Add a new build on copr with uploading a srpm file.

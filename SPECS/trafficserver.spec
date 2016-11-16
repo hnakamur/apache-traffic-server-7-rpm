@@ -5,8 +5,8 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	6.2.0
-Release:	2%{?dist}
+Version:	7.0.0
+Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -90,7 +90,6 @@ NOCONFIGURE=1 autoreconf -vif
   --localstatedir=%{_prefix}%{_localstatedir} \
   --libexecdir=%{_prefix}/%{_lib}/plugins \
   --with-tcl=/usr/%{_lib} \
-  --enable-luajit \
   --with-user=ats --with-group=ats \
   --disable-silent-rules \
   --enable-experimental-plugins
@@ -212,7 +211,8 @@ fi
 %{_bindir}/tspush
 %dir %{_libdir}
 %dir %{_libdir}/plugins
-%{_libdir}/libts*.so.6*
+%{_libdir}/libts*.so.7*
+%{_libdir}/libatscppapi*.so.7*
 %{_libdir}/plugins/*.so
 %if %{?fedora}0 > 140 || %{?rhel}0 > 60
 /lib/systemd/system/trafficserver.service
@@ -230,21 +230,23 @@ fi
 
 %files perl
 %defattr(-,root,root,-)
-%{_prefix}/man/man3/*
+%{_prefix}/share/man/man3/*
 %{_prefix}/lib/perl5/Apache/TS.pm.in
 %{_prefix}/lib/perl5/Apache/TS.pm
 %{_prefix}/lib/perl5/Apache/TS/*
-%{_prefix}/lib/perl5/Apache/TS/Config/*
 
 %files devel
 %defattr(-,root,root,-)
 %{_bindir}/tsxs
-%{_bindir}/header_rewrite_test
 %{_includedir}/ts
+%{_includedir}/atscppapi
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Wed Nov 16 2016 Hiroaki Nakamura <hnakamur@gmail.com> 7.0.0-1
+- Update to 7.0.0 LTS release
+
 * Fri Sep 30 2016 Hiroaki Nakamura <hnakamur@gmail.com> 6.2.0-2
 - Return stale cache even if the origin server response has
   "Cache-Control: s-maxage" header.
