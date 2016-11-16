@@ -213,6 +213,7 @@ fi
 %dir %{_libdir}
 %dir %{_libdir}/plugins
 %{_libdir}/libts*.so.7*
+%{_libdir}/libatscppapi*.so.7*
 %{_libdir}/plugins/*.so
 %if %{?fedora}0 > 140 || %{?rhel}0 > 60
 /lib/systemd/system/trafficserver.service
@@ -239,6 +240,7 @@ fi
 %defattr(-,root,root,-)
 %{_bindir}/tsxs
 %{_includedir}/ts
+%{_includedir}/atscppapi
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/trafficserver.pc
 
