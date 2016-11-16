@@ -90,7 +90,6 @@ NOCONFIGURE=1 autoreconf -vif
   --localstatedir=%{_prefix}%{_localstatedir} \
   --libexecdir=%{_prefix}/%{_lib}/plugins \
   --with-tcl=/usr/%{_lib} \
-  --enable-luajit \
   --with-user=ats --with-group=ats \
   --disable-silent-rules \
   --enable-experimental-plugins
