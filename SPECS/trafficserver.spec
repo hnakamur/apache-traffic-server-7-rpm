@@ -82,6 +82,11 @@ The trafficserver-perl package contains perl bindings.
 %patch101 -p1
 %patch102 -p1
 
+getent group ats >/dev/null || groupadd -r ats -g 176 &>/dev/null
+getent passwd ats >/dev/null || \
+useradd -r -u 176 -g ats -d / -s /sbin/nologin \
+        -c "Apache Traffic Server" ats &>/dev/null
+
 %build
 NOCONFIGURE=1 autoreconf -vif
 %configure \
