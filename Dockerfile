@@ -1,7 +1,8 @@
 FROM centos:7
 MAINTAINER Hiroaki Nakamura <hnakamur@gmail.com>
 
-RUN yum -y install @"Development Tools" rpm-build rpmdevtools patch curl less vim-enhanced \
+RUN yum -y install @"Development Tools" \
+ && yum -y install rpm-build yum-utils rpmdevtools patch curl less vim-enhanced \
  && rpmdev-setuptree
 
 WORKDIR /root/rpmbuild
@@ -17,5 +18,5 @@ RUN source_urls=`rpmspec -P ./SPECS/trafficserver.spec | awk '/^Source[0-9]*:\s*
 RUN yum install -y epel-release \
  && yum-builddep -y ./SPECS/trafficserver.spec
 
-RUN rpmbuild -bb ./SPECS/trafficserver.spec \
- && yum install -y ./RPMS/x86_64/*.rpm
+RUN rpmbuild -bb ./SPECS/trafficserver.spec
+RUN yum install -y ./RPMS/x86_64/*.rpm
