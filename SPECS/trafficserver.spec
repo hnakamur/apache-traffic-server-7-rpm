@@ -5,8 +5,8 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	7.0.0
-Release:	2%{?dist}
+Version:	7.1.0
+Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
 URL:		http://trafficserver.apache.org/index.html
@@ -243,6 +243,9 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Thu Aug  3 2017 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.0-1
+- Update to 7.1.0 LTS release
+
 * Wed Nov 16 2016 Hiroaki Nakamura <hnakamur@gmail.com> 7.0.0-2
 - Remove expat-devel from build dependencies
 
