@@ -5,7 +5,7 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	7.1.2
+Version:	7.1.3
 Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
@@ -230,7 +230,6 @@ fi
 %files perl
 %defattr(-,root,root,-)
 %{_prefix}/share/man/man3/*
-%{_prefix}/lib/perl5/Apache/TS.pm.in
 %{_prefix}/lib/perl5/Apache/TS.pm
 %{_prefix}/lib/perl5/Apache/TS/*
 
@@ -243,6 +242,9 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Fri Apr 20 2018 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.3-1
+- Update to 7.1.3 LTS release
+
 * Mon Mar 26 2018 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.2-1
 - Update to 7.1.2 LTS release
 
