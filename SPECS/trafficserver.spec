@@ -5,7 +5,7 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	7.1.3
+Version:	7.1.4
 Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
@@ -242,6 +242,9 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
+* Thu Aug  9 2018 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.4-1
+- Update to 7.1.4 LTS release
+
 * Fri Apr 20 2018 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.3-1
 - Update to 7.1.3 LTS release
 
