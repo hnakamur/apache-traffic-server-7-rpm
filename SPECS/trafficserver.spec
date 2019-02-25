@@ -5,7 +5,7 @@
 
 Summary:	Fast, scalable and extensible HTTP/1.1 compliant caching proxy server
 Name:		trafficserver
-Version:	7.1.4
+Version:	7.1.6
 Release:	1%{?dist}
 License:	ASL 2.0
 Group:		System Environment/Daemons
@@ -20,7 +20,7 @@ Source5:	trafficserver.tmpfilesd
 Patch1:		trafficserver-init_scripts.patch
 
 Patch101:	trafficserver-6.2.0-require-s-maxage.patch
-Patch102:	trafficserver-6.2.0.return_stale_cache_with_s_maxage.patch
+Patch102:	trafficserver-7.1.4.return_stale_cache_with_s_maxage.patch
 
 # BuildRoot is only needed for EPEL5:
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -242,8 +242,10 @@ fi
 %{_libdir}/pkgconfig/trafficserver.pc
 
 %changelog
-* Thu Aug  9 2018 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.4-1
-- Update to 7.1.4 LTS release
+* Mon Feb 25 2019 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.6-1
+- Update to 7.1.6 LTS release
+- Return stale cache with s-maxage only if
+  cache_required_headers is 99
 
 * Fri Apr 20 2018 Hiroaki Nakamura <hnakamur@gmail.com> 7.1.3-1
 - Update to 7.1.3 LTS release

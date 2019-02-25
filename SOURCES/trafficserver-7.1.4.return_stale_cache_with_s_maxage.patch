@@ -1,0 +1,18 @@
+diff --git a/proxy/http/HttpTransact.cc b/proxy/http/HttpTransact.cc
+index ace91d8ae..92baa2bee 100644
+--- a/proxy/http/HttpTransact.cc
++++ b/proxy/http/HttpTransact.cc
+@@ -6028,6 +6028,13 @@ HttpTransact::is_stale_cache_response_returnable(State *s)
+   uint32_t cc_mask;
+   cc_mask = (MIME_COOKED_MASK_CC_MUST_REVALIDATE | MIME_COOKED_MASK_CC_PROXY_REVALIDATE | MIME_COOKED_MASK_CC_NEED_REVALIDATE_ONCE |
+              MIME_COOKED_MASK_CC_NO_CACHE | MIME_COOKED_MASK_CC_NO_STORE | MIME_COOKED_MASK_CC_S_MAXAGE);
++  if (s->txn_conf->cache_required_headers == HttpConfigParams::CACHE_REQUIRED_HEADERS_CACHE_CONTROL_S_MAXAGE) {
++    // NOTE: Normally, "4.2.4. Serving Stale Responses" of RFC7234 prohibits a stale cache is served
++    // when s-maxage is specified.
++    // However, when we set cache_required_headers to CACHE_REQUIRED_HEADERS_CACHE_CONTROL_S_MAXAGE,
++    // we would like to serve stale cache even if the origin server response has "s-maxage" header.
++    cc_mask &= ~MIME_COOKED_MASK_CC_S_MAXAGE;
++  }
+   if ((cached_response->get_cooked_cc_mask() & cc_mask) || cached_response->is_pragma_no_cache_set()) {
+     DebugTxn("http_trans", "[is_stale_cache_response_returnable] "
+                            "document headers prevent serving stale");
